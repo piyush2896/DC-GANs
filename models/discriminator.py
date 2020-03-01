@@ -11,7 +11,7 @@ class Conv2dBNLeaky(nn.Module):
                  apply_bn=True):
         super(Conv2dBNLeaky, self).__init__()
         li = [
-            nn.Conv2d(in_channels, out_channels, kernel_size, strides, padding, bias)
+            nn.Conv2d(in_channels, out_channels, kernel_size, strides, padding, bias=bias)
         ]
 
         if apply_bn:
@@ -29,7 +29,7 @@ class Discriminator(nn.Module):
             Conv2dBNLeaky(in_dim, filters, 4, 2, 1, apply_bn=False),
             Conv2dBNLeaky(filters, filters*2, 4, 2, 1),
             Conv2dBNLeaky(filters*2, filters*4, 4, 2, 1),
-            Conv2dBNLeaky(filters*2, filters*4, 4, 2, 1),
+            Conv2dBNLeaky(filters*4, filters*8, 4, 2, 1),
             nn.Conv2d(filters*8, 1, 4, 1, 0, bias=False),
             nn.Sigmoid()
         )
