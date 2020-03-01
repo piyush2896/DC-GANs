@@ -9,6 +9,8 @@ class Config:
     LEARNING_RATE = 2e-4
     BETA = 0.5
     WORKERS = 2
-    ROOT = './data/celeba'
+    DATA_ROOT = './data/celeba'
     DEVICE = 'gpu'
     MODEL_PATH = './model_weights'
+    LOG_STEP = 50
+    IMG_LOG_STEP = 500
