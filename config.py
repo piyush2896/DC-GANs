@@ -10,3 +10,5 @@ class Config:
     BETA = 0.5
     WORKERS = 2
     ROOT = './data/celeba'
+    DEVICE = 'gpu'
+    MODEL_PATH = './model_weights'
