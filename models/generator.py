@@ -28,7 +28,8 @@ class Generator(nn.Module):
             ConvTranspose2dBNReLu(filters*8, filters*4, 4, 2, 1),
             ConvTranspose2dBNReLu(filters*4, filters*2, 4, 2, 1),
             ConvTranspose2dBNReLu(filters*2, filters, 4, 2, 1),
-            ConvTranspose2dBNReLu(filters, out_channels, 4, 2, 1)
+            nn.ConvTranspose2d(filters, out_channels, 4, 2, 1, bias=False),
+            nn.Tanh()
         )
 
     def forward(self, X):
