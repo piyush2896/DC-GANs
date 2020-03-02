@@ -8,9 +8,9 @@ class Config:
     NUM_EPOCHS = 50
     LEARNING_RATE = 2e-4
     BETA = 0.5
-    WORKERS = 2
-    DATA_ROOT = './data/celeba'
-    DEVICE = 'gpu'
+    NUM_WORKERS = 2
+    DATA_ROOT = './data/'
+    DEVICE = 'cuda'
     MODEL_PATH = './model_weights'
     LOG_STEP = 50
     IMG_LOG_STEP = 500
