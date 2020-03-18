@@ -2,7 +2,7 @@ from torch import nn
 
 def weights_init(m):
     classname = m.__class__.__name__
-    if classname.find('Transpose2d') != -1 or classname.find('2dBN') != -1:
+    if classname.find('2dBN') != -1:
         return
     elif classname.find('Conv') != -1:
         nn.init.normal_(m.weight.data, 0.0, 0.02)

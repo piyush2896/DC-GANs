@@ -12,8 +12,6 @@ class Trainer:
         self.Config = Config
         self.__init_generator()
         self.__init_discriminator()
-        self.fixed_noise = torch.randn(
-            64, Config.N_DIMS, 1, 1, device=Config.DEVICE)
 
         self.__input = torch.FloatTensor(
             self.Config.BATCH_SIZE, 3, self.Config.IMG_SIZE, self.Config.IMG_SIZE)
@@ -29,7 +27,7 @@ class Trainer:
         self.__label = self.__label.to(self.Config.DEVICE)
 
         self.real_label = 1
-        self.fake_label = 1
+        self.fake_label = 0
 
         self.stepG = optim.Adam(
             self.netG.parameters(), lr=Config.LEARNING_RATE,
@@ -68,7 +66,7 @@ class Trainer:
 
     def __train_on_real(self, real_imgs):
         self.netD.zero_grad()
-        self.__input.resize_as_(real_imgs).copy(real_imgs)
+        self.__input.resize_as_(real_imgs).copy_(real_imgs)
         self.__label.resize_(real_imgs.size(0)).fill_(self.real_label)
 
         input_var = torch.autograd.Variable(self.__input)
@@ -92,13 +90,13 @@ class Trainer:
         err_fake_imgs.backward()
 
         self.current_iter['D_G_z1'] = out.mean().item()
-        self.current_iter['err_fake_imgs'] = err_fake_imgs
+        self.current_iter['err_fake_imgs'] = err_fake_imgs.item()
 
         self.stepD.step()
 
         self.netG.zero_grad()
         
-        label_var = torch.autograd.Variable(self.__label.fill_(self.fake_label))
+        label_var = torch.autograd.Variable(self.__label.fill_(self.real_label))
         out = self.netD(fake).view(-1)
         errG = self.criterion(out, label_var)
         errG.backward()
@@ -115,7 +113,7 @@ class Trainer:
             nth_epoch, self.Config.EPOCHS, batch_num, n_batches,
             self.current_iter['errD'], self.current_iter['errG'],
             self.current_iter['D_x'], self.current_iter['D_G_z1'],
-            self.current_iter['D_G_z1']))
+            self.current_iter['D_G_z2']))
 
     def train(self):
         self.img_list = []
@@ -131,9 +129,9 @@ class Trainer:
 
         print('Starting the training...')
         for epoch in range(self.Config.EPOCHS):
-            for i, data in enumerate(data.dataloader, 0):
+            for i, batch in enumerate(data.dataloader, 0):
 
-                real_imgs, _ = data
+                real_imgs, _ = batch
                 real_imgs = real_imgs.to(self.Config.DEVICE)
                 self.__train_on_real(real_imgs)
                 self.__train_on_fake()
@@ -146,7 +144,7 @@ class Trainer:
                 if ((it_ctr % self.Config.IMG_LOG_STEP == 0) or
                     ((epoch == self.Config.EPOCHS - 1) and (i == len(data)-1))):
                     with torch.no_grad():
-                        fake = self.netG(self.fixed_noise).detach().cpu()
+                        fake = self.netG(self.__fixed_noise).detach().cpu()
                     self.img_list.append(fake)
                     torch.save(self.netG.state_dict,
                         os.path.join(self.Config.MODEL_PATH, 'generator.model'))
