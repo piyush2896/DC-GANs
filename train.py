@@ -144,7 +144,7 @@ class Trainer:
                     self.__print_iteration(epoch, i, len(data.dataloader))
 
                 if ((it_ctr % self.Config.IMG_LOG_STEP == 0) or
-                    ((epoch == self.Config.EPOCHS - 1) and (i == len(data)-1))):
+                    ((epoch == self.Config.EPOCHS - 1) and (i == len(data.dataloader)-1))):
                     with torch.no_grad():
                         fake = self.netG(self.__fixed_noise).detach().cpu()
                     self.img_list.append(fake)
