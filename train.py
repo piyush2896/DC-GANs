@@ -75,7 +75,6 @@ class Trainer:
         out = self.netD(input_var).view(-1)
         err_real_imgs = self.criterion(out, label_var)
         err_real_imgs.backward()
-        self.stepD.step()
 
         self.current_iter['D_x'] = out.mean().item()
         self.current_iter['err_real_imgs'] = err_real_imgs.item()
