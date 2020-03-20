@@ -14,3 +14,10 @@ The equilibrium is reached when the discriminator starts guessing to 50% and gen
 
 ## DCGANs
 DCGANs are GANs using convolutional and convolutional-transpose layers in the architectures of discriminators and generators respectively.
+
+## Generated Examples
+
+|![](./imgs/generated_examples.png)|
+|:--:|
+|Generated Images|
+
